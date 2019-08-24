@@ -22,35 +22,42 @@ package com.github.airsaid.library.widget;
 public class ChordHelper {
 
     /**
-     * 获取横按和弦所需要的信息。分别是品、和截止弦。
+     * Get the information you need to cross the chords. 
+     * They are the fret and the cut-off string.
      *
-     * @param chord 和弦对象
-     * @return 信息数组，当是横按情况时，角标 0 处存储的是品，角标 1 处存储的是截止弦。当非横按时返回 NULL。
+     * @param chord Chord object
+     * @return The information array, when it is barred, 
+     * stores the product at the corner mark 0, 
+     * and stores the cut-off string at the corner mark 1. 
+     * Returns NULL when not barred.
      */
     public int[] getBarreChordData(Chord chord) {
         int[] data = new int[2];
 
-        // 判断是否有空弦
+        // Determine if there is an empty string
         boolean emptyString = chord.isEmptyString();
         if (emptyString) {
             int withFirstString = getWithFirstString(chord);
-            // 判断 1 弦处是否是和弦中最小的品，并且更高的弦与 1 弦品相同且相连
+            // Determine if the 1 string is the lowest fret in the chord,
+            // and the higher string is the same as the 1 string and connected
             if (firstStringLeast(chord) && withFirstString > 1) {
-                // 横按：1 弦 -> 相连的最高弦
+                // barre: 1 string -> the highest string connected
                 data[0] = chord.getLeastFret();
                 data[1] = withFirstString;
             } else {
-                // 非横按
+                // Non-horizontal
                 return null;
             }
         } else {
-            // 判断是否有闭弦
+            // Determine if there is a closed string
             if (chord.isClosedString()) {
-                // 横按：1 弦 -> 最高弦（如果最高弦处是闭弦，则再倒退一弦，直到非闭弦处）
+                // Horizontal press: 1 string -> highest string 
+                // (if the highest string is closed, 
+                // then rewind a string until the non-closed string)
                 data[0] = chord.getLeastFret();
                 data[1] = getMaxUnClosedString(chord);
             } else {
-                // 横按：1 弦 -> 吉他的最高弦
+                //Horizontal press: 1 string -> the highest string of the guitar
                 data[0] = chord.getLeastFret();
                 data[1] = Chord.STRING;
             }
@@ -60,10 +67,11 @@ public class ChordHelper {
     }
 
     /**
-     * 获取 1 弦处的品是否是整个和弦中最小的品。
+     * Get the item at the 1 string is the smallest item in the entire chord.
      *
-     * @param chord 和弦对象
-     * @return 1 弦处是最小的品则返回 true，否则返回 false。
+     * @param chord Chord object
+     * @return Returns true if the 1st string is the smallest item, 
+     * otherwise returns false.
      */
     public boolean firstStringLeast(Chord chord) {
         int[] frets = chord.getFrets();
@@ -71,12 +79,14 @@ public class ChordHelper {
     }
 
     /**
-     * 获取同 1 弦处相同品的最大弦。
+     * Get the largest chord of the same item at the same 1 chord.
      *
-     * 比如和弦为：3,3,2,1,1,1 那么第 1 弦的品为 1，而 2、3 弦也和 1 弦品相同，于是返回最大的弦： 3（弦）。
+     * For example, if the chord is: 3, 3, 2, 1, 1, 1 then the 1st string is 1,
+     * and the 2, 3 strings are the same as the 1 string, 
+     * so the largest string is returned: 3 (string).
      *
-     * @param chord 和弦对象
-     * @return 最大弦。
+     * @param chord Chord object
+     * @return Maximum string.
      */
     public int getWithFirstString(Chord chord) {
         int string = 1;
@@ -97,12 +107,15 @@ public class ChordHelper {
     }
 
     /**
-     * 获取最大的非闭弦的弦。
+     * Get the largest non-closed string.
      *
-     * 假设和弦为：-1,3,2,1,1,1 那么最大的弦本来是第 6 弦，但是第 6 弦处是个空弦，那么就看第 5 弦，由于不是闭弦，于是返回 5。
+     * Suppose the chord is: -1,3,2,1,1,1. 
+     * The largest string is the sixth string, 
+     * but the sixth string is an empty string. Then look at the 5th string.
+     * Since it is not a closed string, it returns 5 .
      *
-     * @param chord 和弦对象
-     * @return 弦。
+     * @param chord Chord object
+     * @return string.
      */
     public int getMaxUnClosedString(Chord chord) {
         int[] frets = chord.getFrets();

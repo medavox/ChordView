@@ -11,6 +11,9 @@ Added to app/build.gradle:
 ```
 implementation 'com.github.airsaid:chordview:0.0.8'
 ```
+# Purpose of this (medavox's) fork
+
+Solely to translate the provided javadoc into English. 
 
 
 # Usage

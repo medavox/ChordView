@@ -19,7 +19,9 @@ package com.github.airsaid.library.widget;
 import java.util.Arrays;
 
 /**
- * 和铉。根据规则，当品数据为 -1 时表示闭弦，为 0 时表示空弦。
+ * Chords. 
+ * According to the rule, when the product data is -1, it means closed string, 
+ * and when it is 0, it means empty string.
  *
  * @author airsaid
  */
@@ -61,9 +63,10 @@ public class Chord {
     }
 
     /**
-     * 返回该和铉中是否有空弦。
+     * Returns whether there is an empty string in the sum.
      *
-     * @return 当该和弦中有空弦时则返回 true，否则返回 false。
+     * @return Returns true if there is an empty string in the chord, 
+     * otherwise returns false.
      */
     public boolean isEmptyString() {
         for (int fret : frets) {
@@ -73,9 +76,10 @@ public class Chord {
     }
 
     /**
-     * 返回该和铉中是否有闭弦。
+     * Returns whether there is a closed string in the sum.
      *
-     * @return 当该和弦中有闭弦时则返回 true，否则返回 false
+     * @return Return true if there is a closed string in the chord, 
+     * false otherwise
      */
     public boolean isClosedString() {
         for (int fret : frets) {
@@ -85,24 +89,26 @@ public class Chord {
     }
 
     /**
-     * 获取当前和弦中最小的品。
+     * Get the smallest fret in the current chord.
      *
-     * @return 最小品，当没有找到时会返回 -1。（这种情况一般不会出现，除非 frets 数据有问题）
+     * @return The smallest fret, when it is not found, will return -1. 
+     * (This situation generally does not occur 
+     * unless there is a problem with the frets data)
      */
     public int getLeastFret() {
         int leastFret = -1;
         for (int i = 0; i < frets.length; i++) {
             int fret = frets[i];
-            // 不处理小于 1 品的情况
+            // Do not handle less than 1 fret
             if (fret < 1) {
                 continue;
             }
-            // 第一次为 leastFret 赋值
+            //Assigning a value to leastFret for the first time
             if (leastFret == -1) {
                 leastFret = fret;
                 continue;
             }
-            // 对后面的数依次进行比较，得到最小的品
+            //Compare the following numbers in order to get the smallest product
             if (fret < leastFret) {
                 leastFret = fret;
             }
@@ -113,13 +119,15 @@ public class Chord {
     /**
      * 获取和弦中最大的品。
      *
-     * @return 最大品，当没有找到时会返回 -1。（这种情况一般不会出现，除非 frets 数据有问题）
+     * @return The largest product, will return -1 when not found. 
+     * (This situation generally does not occur unless there is a problem 
+     * with the frets data)
      */
     public int getLargestFret() {
         int largest = -1;
         for (int i = 0; i < frets.length; i++) {
             int fret = frets[i];
-            // 不处理小于 1 品的情况
+            // Do not handle less than 1 item
             if (fret < 1) {
                 continue;
             }
@@ -128,7 +136,7 @@ public class Chord {
                 largest = fret;
                 continue;
             }
-            // 对后面的数依次进行比较，得到最大的品
+            //Compare the following numbers in order to get the largest product.
             if (fret > largest) {
                 largest = fret;
             }
@@ -137,10 +145,10 @@ public class Chord {
     }
 
     /**
-     * 通过指定的弦获取对应位置的品。
+     * Get the fret at the corresponding position by the specified string.
      *
-     * @param string 弦
-     * @return 品。
+     * @param string string
+     * @return fret
      */
     public int getFret(int string) {
         return frets[STRING - string];

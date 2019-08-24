@@ -29,7 +29,7 @@ import java.lang.annotation.RetentionPolicy;
 
 
 /**
- * 用于渲染吉他和铉的 Android 自定义 View。
+ * Android custom view for rendering guitar chords.
  *
  * @author airsaid
  */
@@ -39,23 +39,25 @@ public class ChordView extends View {
     @Retention(RetentionPolicy.SOURCE)
     public @interface ShowMode {}
 
-    /** 弦数 */
+    /** Number of strings */
     private static final int STRING = 6;
-    /** 品数 */
+    /** Number of frets */
     private static final int FRET = 4;
-    /** 默认显示模式 */
+    /** Default display mode */
     public static final int NORMAL_SHOW_MODE = 1;
-    /** 简单显示模式，默认只显示三品 */
+    /** Simple display mode, only three products are displayed by default */
     public static final int SIMPLE_SHOW_MODE = 2;
 
     /** 显示模式 */
     @ShowMode private int mShowMode;
 
-    /** 表示闭弦符号的图片，如果为 NULL，则不会绘制闭弦提示符号 */
+    /** A picture representing a closed string symbol. 
+    If it is NULL, the closed string prompt symbol will not be drawn. */
     private Bitmap mClosedStringBitmap;
-    /** 表示空弦符号的图片，如果为 NULL，则不会绘制空弦提示符号 */
+    /** A picture representing an empty string symbol. 
+    If it is NULL, the empty string prompt symbol will not be drawn. */
     private Bitmap mEmptyStringBitmap;
-    /** 空弦、闭弦提示符号的 y 轴偏移量 */
+    /** Y-axis offset of empty string and closed string hints */
     private float mStringOffsetY;
 
     /** 琴头弧度 */
@@ -148,9 +150,9 @@ public class ChordView extends View {
     }
 
     /**
-     * 设置和弦对象并根据该和弦开始渲染。
+     * Sets the chord object and starts rendering based on the chord.
      *
-     * @param chord 和弦对象
+     * @param chord Chord object.
      */
     public void setChord(Chord chord) {
         mChord = chord;
@@ -158,18 +160,21 @@ public class ChordView extends View {
     }
 
     /**
-     * 获取当前和弦对象。
+     * Get the current chord object.
      *
-     * @return 和弦对象。
+     * @return Chord object.
      */
     public Chord getChord() {
         return mChord;
     }
 
     /**
-     * 设置显示模式。可设置的参数有默认的 {@link #NORMAL_SHOW_MODE} 和 {@link #SIMPLE_SHOW_MODE}。
+     * Set the display mode. 
+     The parameters that can be set are 
+     the default {@link #NORMAL_SHOW_MODE} and 
+     {@link #SIMPLE_SHOW_MODE}。
      *
-     * @param mode 显示模式
+     * @param mode Display mode
      */
     public void setShowMode(@ShowMode int mode) {
         mShowMode = mode;
@@ -186,9 +191,10 @@ public class ChordView extends View {
     }
 
     /**
-     * 通过图片资源 id 设置闭弦符号的图片。
+     * Set the picture of the closed string symbol by 
+     * the image resource id.
      *
-     * @param resId 闭弦符号图片资源 id
+     * @param resId Closed string picture resource id
      */
     public void setClosedStringImage(@IdRes int resId) {
         if (resId == 0) return;
@@ -196,27 +202,27 @@ public class ChordView extends View {
     }
 
     /**
-     * 设置闭弦符号的图片。
+     * Set the picture of the closed string symbol.
      *
-     * @param bitmap Bitmap 图片
+     * @param bitmap Bitmap image
      */
     public void setClosedStringBitmap(Bitmap bitmap) {
         mClosedStringBitmap = bitmap;
     }
 
     /**
-     * 获取闭弦符号的图片。
+     * Get a picture of a closed string symbol.
      *
-     * @return 闭弦 Bitmap 图片。
+     * @return Closed string Bitmap image.
      */
     public Bitmap getClosedStringBitmap() {
         return mClosedStringBitmap;
     }
 
     /**
-     * 通过图片资源 id 设置空弦符号的图片。
+     * Set the picture of the empty string symbol with the image resource id.
      *
-     * @param resId 空弦符号图片资源 id
+     * @param resId Empty string symbol picture resource id
      */
     public void setEmptyStringImage(@IdRes int resId) {
         if (resId == 0) return;
@@ -224,36 +230,36 @@ public class ChordView extends View {
     }
 
     /**
-     * 设置空弦符号的图片。
+     * Set the picture of the empty string symbol.
      *
-     * @param bitmap Bitmap 图片
+     * @param bitmap Bitmap Image.
      */
     public void setEmptyStringBitmap(Bitmap bitmap) {
         mEmptyStringBitmap = bitmap;
     }
 
     /**
-     * 获取空弦符号的图片。
+     * Get a picture of an empty string symbol.
      *
-     * @return 空弦 Bitmap 图片。
+     * @return Empty string Bitmap image.
      */
     public Bitmap getEmptyStringBitmap() {
         return mEmptyStringBitmap;
     }
 
     /**
-     * 设置空弦、闭弦提示符号的 y 轴偏移量
+     * Set the y-axis offset of the empty string and closed string hints
      *
-     * @param offsetY y 轴偏移量
+     * @param offsetY Y-axis offset
      */
     public void setStringOffsetY(float offsetY) {
         mStringOffsetY = offsetY;
     }
 
     /**
-     * 获取空弦、闭弦提示符号的 y 轴偏移量
+     * Get the y-axis offset of the empty string and closed string hints
      *
-     * @return y 轴偏移量。
+     * @return Y-axis offset.
      */
     public float getStringOffsetY() {
         return mStringOffsetY;
@@ -598,7 +604,7 @@ public class ChordView extends View {
     }
 
     /**
-     * 绘制闭弦和空弦。
+     * Draw closed and empty strings.
      *
      * @param canvas 画布对象
      */
@@ -616,12 +622,12 @@ public class ChordView extends View {
     }
 
     /**
-     * 绘制品文字。
+     * Draw the text.
      *
-     * @param canvas 画布对象
+     * @param canvas Canvas object
      */
     private void drawFrets(Canvas canvas) {
-        // 如果最高品未超过 4 品，则不绘制
+        //If the highest product does not exceed 4 items, it will not be drawn.
         if (!isExceedDefaultFret()) {
             return;
         }
@@ -641,9 +647,10 @@ public class ChordView extends View {
             float x = fretWidth - fretTextWidth - mFretTextOffsetX;
             float y = getStringHeight() + getHeadHeight() + (getGridRowHeight() * index);
             canvas.drawText(fret, x, y, mPaint);
-            // 简单模式下，如果和弦中的品超过三品，则就只展示第一个品数字
+            // In simple mode, if there are more than three items in the chord,
+            // only the first item number will be displayed.
             if (mShowMode == SIMPLE_SHOW_MODE) {
-                // 不继续绘制
+                // Do not continue drawing
                 break;
             }
             index++;
@@ -651,9 +658,9 @@ public class ChordView extends View {
     }
 
     /**
-     * 绘制琴头。
+     * Draw the head.
      *
-     * @param canvas 画布对象
+     * @param canvas Canvas object
      */
     private void drawHead(Canvas canvas) {
         if (!isDrawHead()) return;
@@ -701,7 +708,7 @@ public class ChordView extends View {
     }
 
     /**
-     * 绘制节点。
+     * Draw a node.
      *
      * @param canvas 画布对象
      */
@@ -711,12 +718,12 @@ public class ChordView extends View {
         int[] frets = mChord.getFrets();
         int[] fingers = mChord.getFingers();
 
-        // 绘制横按
+        // Draw a barre
         int[] barreChord = mChordHelper.getBarreChordData(mChord);
         int barreFret = 0, barreString = 0;
-        // 判断是否有横按情况
+        // Determine if there is a horizontal situation
         if (barreChord != null) {
-            // 有横按情况，绘制横按矩形
+            // With a barre, draw a horizontal rectangle
             barreFret = barreChord[0];
             barreString = barreChord[1];
 
@@ -727,17 +734,17 @@ public class ChordView extends View {
             float left = getFretWidth() + mGridLineWidth / 2 + (getGridColumnWidth() * (STRING - barreString));
             float top = getStringHeight() + getHeadHeight();
             if (isExceedDefaultFret()) {
-                // 显示在 1 品位置
+                // Displayed at the 1 fret position
                 top += getGridRowHeight() / 2 - mNoteRadius;
             } else {
-                // 显示在最小品位置
+                // Displayed in the smallest position
                 top += getGridRowHeight() * barreFret - (getGridRowHeight() / 2) - mNoteRadius;
             }
             float right = left + getGridColumnWidth() * (barreString - 1);
             float bottom = top + mNoteRadius * 2;
             canvas.drawRect(left, top, right, bottom, mPaint);
 
-            // 绘制横按边框
+            // Draw a horizontal border
             if (mBarreStrokeWidth > 0) {
                 mPaint.setAlpha(255);
                 mPaint.setColor(mBarreStrokeColor);
@@ -747,18 +754,18 @@ public class ChordView extends View {
                 canvas.drawLine(left, bottom - mBarreStrokeWidth / 2, right, bottom - mBarreStrokeWidth / 2, mPaint);
             }
 
-            // 绘制横按两端节点
+            // Draw horizontally on both ends of the node
             drawNote(canvas, barreFret, STRING, fingers != null ? 1 : 0, 255, 0, 0);
             drawNote(canvas, barreFret, STRING - (barreString - 1), fingers != null ? 1 : 0, 255, 0, 0);
         }
-        // 绘制其他节点
+        // Draw other nodes
         for (int index = 0; index < frets.length; index++) {
             int fret = frets[index];
-            // 不绘制闭弦和空弦情况
+            // Do not draw closed and empty strings
             if (fret < 1) {
                 continue;
             }
-            // 不绘制横按区域的节点
+            // Do not draw nodes that are barred
             if (barreChord != null && barreFret == fret && frets.length - index <= barreString) {
                 continue;
             }
@@ -770,7 +777,7 @@ public class ChordView extends View {
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(mNoteColor);
         mPaint.setAlpha(alpha);
-        // 绘制节点实心圆
+        // Draw a solid circle of nodes
         float columnWidth = getGridColumnWidth();
         float rowHeight = getGridRowHeight();
         float cx = ((getFretWidth() + mGridLineWidth / 2) + (columnWidth * (string - 1)))
@@ -788,7 +795,7 @@ public class ChordView extends View {
         }
         float cy = (getStringHeight() + getHeadHeight()) + (rowHeight * f) - (rowHeight / 2);
         canvas.drawCircle(cx, cy, mNoteRadius, mPaint);
-        // 绘制节点文字
+        // Draw node text
         if (mShowMode != SIMPLE_SHOW_MODE && finger > 0) {
             mPaint.setColor(mNoteTextColor);
             mPaint.setTextSize(mNoteTextSize);
@@ -796,7 +803,7 @@ public class ChordView extends View {
             canvas.drawText(fingerStr, cx - mPaint.measureText(fingerStr) / 2,
                     cy - (mPaint.ascent() + mPaint.descent()) / 2, mPaint);
         }
-        // 绘制节点边框
+        // Draw a node border
         if (strokeWidth > 0) {
             mPaint.setStrokeWidth(strokeWidth);
             mPaint.setStyle(Paint.Style.STROKE);
@@ -839,19 +846,20 @@ public class ChordView extends View {
     }
 
     /**
-     * 通过指定的弦获取其对应的空弦或闭弦表现图片 Bitmap。
+     * Get the corresponding empty or closed string representation picture 
+     * Bitmap by the specified string.
      *
-     * @param string 弦（0 = 6 弦，1 = 5 弦，以此类推）
-     * @return 空弦或闭弦表现图片。
+     * @param string String (0 = 6 strings, 1 = 5 strings, and so on)
+     * @return Empty or closed strings represent pictures.
      */
     @Nullable
     private Bitmap getStringBitmap(int string) {
         if (mChord != null) {
             int[] frets = mChord.getFrets();
             int fret = frets[string];
-            if (fret == -1) { // 闭弦
+            if (fret == -1) { // Closed string
                 return mClosedStringBitmap;
-            } else if (fret == 0) { // 空弦
+            } else if (fret == 0) { // Empty string
                 return mEmptyStringBitmap;
             }
         }
@@ -869,22 +877,26 @@ public class ChordView extends View {
     }
 
     /**
-     * 是否需要绘制弦区域。
+     * Whether you need to draw a string area.
      *
-     * @return 返回 true，表示需要绘制，不需要绘制返回 false。
+     * @return Returns true, indicating that you need to draw, 
+     no need to draw to return false.
      */
     private boolean isDrawStrings() {
-        // 只要和弦中有闭弦或空弦则需要绘制
+        // As long as there are closed or empty strings in the chord, 
+        //you need to draw
         return mChord != null && (mChord.isClosedString() || mChord.isEmptyString());
     }
 
     /**
-     * 是否需要绘制琴头。
+     * Whether you need to draw the head.
      *
-     * @return 返回 true，表示需要绘制，不需要绘制返回 false。
+     * @return Returns true, indicating that you need to draw, 
+     //no need to draw to return false.
      */
     private boolean isDrawHead() {
-        // 如果最大品未超过 5 品则认为需要绘制
+        // If the maximum fret does not exceed 5 items, 
+        //it is considered to be drawn.
         return mChord != null && mChord.getLargestFret() <= 5;
     }
 
@@ -955,12 +967,15 @@ public class ChordView extends View {
     }
 
     /**
-     * 获取行数。
+     * Get the number of rows.
      *
-     * @return 行。
+     * @return Row
      */
     private int getRow() {
-        // 简单模式下，如果和弦中最大品和最小品的跨度未超过三品，且 1 品为最低品，则行数就为三行
+        //In simple mode, if the span of the largest and smallest products in
+        // the chord does not exceed three products, 
+        //and the first product is the lowest product, 
+        //the number of lines is three lines.
         if (mShowMode == SIMPLE_SHOW_MODE) {
             int leastFret = getLeastFret();
             int largestFret = getLargestFret();
@@ -973,9 +988,9 @@ public class ChordView extends View {
     }
 
     /**
-     * 最大品是否超过了默认显示品。
+     * Whether the maximum fret exceeds the default display.
      *
-     * @return 超过了，返回 true，否则返回 false。
+     * @return Returns true if it is exceeded, otherwise returns false.
      */
     private boolean isExceedDefaultFret() {
         return getLargestFret() > FRET;
