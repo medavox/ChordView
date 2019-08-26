@@ -27,6 +27,8 @@ import java.util.Arrays;
  */
 public class Chord {
 
+    public static Chord defaultC = new Chord(new int[]{-1, 3, 2, 0, 1, 0});
+
     /** 弦数 */
     public static final int STRING = 6;
 
