@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 Airsaid. https://github.com/airsaid
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.airsaid.library.widget;
+package com.github.airsaid.library.widget
 
-import java.util.Arrays;
+import java.util.Arrays
 
 /**
  * Chords. 
@@ -25,43 +25,16 @@ import java.util.Arrays;
  *
  * @author airsaid
  */
-public class Chord {
+class Chord(var frets:IntArray=intArrayOf(), var fingers:IntArray=intArrayOf()) {
+    companion object {
+        @JvmStatic
+        val defaultC  = Chord(intArrayOf(-1, 3, 2, 0, 1, 0))
 
-    public static Chord defaultC = new Chord(new int[]{-1, 3, 2, 0, 1, 0});
-
-    /** 弦数 */
-    public static final int STRING = 6;
-
-    /** 品 */
-    private int[] frets;
-    /** 指法 */
-    private int[] fingers;
-
-    public Chord() {}
-
-    public Chord(int[] frets) {
-        this.frets = frets;
     }
-
-    public Chord(int[] frets, int[] fingers) {
-        this.frets = frets;
-        this.fingers = fingers;
-    }
-
-    public int[] getFrets() {
-        return frets;
-    }
-
-    public void setFrets(int[] frets) {
-        this.frets = frets;
-    }
-
-    public int[] getFingers() {
-        return fingers;
-    }
-
-    public void setFingers(int[] fingers) {
-        this.fingers = fingers;
+    val STRING:Int = if(frets.isNotEmpty()) {
+        frets.size
+    }else {
+        6
     }
 
     /**
@@ -70,11 +43,11 @@ public class Chord {
      * @return Returns true if there is an empty string in the chord, 
      * otherwise returns false.
      */
-    public boolean isEmptyString() {
-        for (int fret : frets) {
-            if (fret == 0) return true;
+    fun isEmptyString():Boolean {
+        for (fret in frets) {
+            if (fret == 0) return true
         }
-        return false;
+        return false
     }
 
     /**
@@ -83,11 +56,11 @@ public class Chord {
      * @return Return true if there is a closed string in the chord, 
      * false otherwise
      */
-    public boolean isClosedString() {
-        for (int fret : frets) {
-            if (fret == -1) return true;
+    fun isClosedString():Boolean {
+        for (fret in frets) {
+            if (fret == -1) return true
         }
-        return false;
+        return false
     }
 
     /**
@@ -97,25 +70,25 @@ public class Chord {
      * (This situation generally does not occur 
      * unless there is a problem with the frets data)
      */
-    public int getLeastFret() {
-        int leastFret = -1;
-        for (int i = 0; i < frets.length; i++) {
-            int fret = frets[i];
+    fun getLeastFret():Int {
+        var leastFret = -1
+        for (i in frets.indices) {
+            val fret = frets[i]
             // Do not handle less than 1 fret
             if (fret < 1) {
-                continue;
+                continue
             }
             //Assigning a value to leastFret for the first time
             if (leastFret == -1) {
-                leastFret = fret;
-                continue;
+                leastFret = fret
+                continue
             }
             //Compare the following numbers in order to get the smallest product
             if (fret < leastFret) {
-                leastFret = fret;
+                leastFret = fret
             }
         }
-        return leastFret;
+        return leastFret
     }
 
     /**
@@ -125,25 +98,25 @@ public class Chord {
      * (This situation generally does not occur unless there is a problem 
      * with the frets data)
      */
-    public int getLargestFret() {
-        int largest = -1;
-        for (int i = 0; i < frets.length; i++) {
-            int fret = frets[i];
+    fun getLargestFret():Int {
+        var largest = -1
+        for (i in frets.indices) {
+            val fret = frets[i]
             // Do not handle less than 1 item
             if (fret < 1) {
-                continue;
+                continue
             }
             // 第一次为 largest 赋值
             if (largest == -1) {
-                largest = fret;
-                continue;
+                largest = fret
+                continue
             }
             //Compare the following numbers in order to get the largest product.
             if (fret > largest) {
-                largest = fret;
+                largest = fret
             }
         }
-        return largest;
+        return largest
     }
 
     /**
@@ -152,15 +125,14 @@ public class Chord {
      * @param string string
      * @return fret
      */
-    public int getFret(int string) {
-        return frets[STRING - string];
+    fun getFret(string:Int):Int {
+        return frets[STRING - string]
     }
 
-    @Override
-    public String toString() {
+    override fun toString():String {
         return "Chord{" +
                 "frets=" + Arrays.toString(frets) +
                 ", fingers=" + Arrays.toString(fingers) +
-                '}';
+                "}"
     }
 }
