@@ -25,12 +25,14 @@ import java.util.Arrays
  *
  * @author airsaid
  */
-class Chord(var frets:IntArray=intArrayOf(), var fingers:IntArray=intArrayOf()) {
+data class Chord @JvmOverloads constructor(
+        var frets:IntArray=intArrayOf(), var fingers:IntArray=intArrayOf()) {
     companion object {
         @JvmStatic
         val defaultC  = Chord(intArrayOf(-1, 3, 2, 0, 1, 0))
 
     }
+    @JvmField
     val STRING:Int = if(frets.isNotEmpty()) {
         frets.size
     }else {
@@ -128,6 +130,107 @@ class Chord(var frets:IntArray=intArrayOf(), var fingers:IntArray=intArrayOf()) 
     fun getFret(string:Int):Int {
         return frets[STRING - string]
     }
+
+    /**
+     * Get the information you need to cross the chords.
+     * They are the fret and the cut-off string.
+     *
+     * @param chord Chord object
+     * @return The information array, when it is barred,
+     * stores the product at the corner mark 0,
+     * and stores the cut-off string at the corner mark 1.
+     * Returns NULL when not barred.
+     */
+    fun getBarreChordData():IntArray? {
+        val data = IntArray(2)
+
+        // Determine if there is an empty string
+        if (isEmptyString()) {
+            val withFirstString = getWithFirstString()
+            // Determine if the 1 string is the lowest fret in the chord,
+            // and the higher string is the same as the 1 string and connected
+            if (firstStringLeast() && withFirstString > 1) {
+                // barre: 1 string -> the highest string connected
+                data[0] = getLeastFret()
+                data[1] = withFirstString
+            } else {
+                // Non-horizontal
+                return null
+            }
+        } else {
+            // Determine if there is a closed string
+            if (isClosedString()) {
+                // Horizontal press: 1 string -> highest string 
+                // (if the highest string is closed, 
+                // then rewind a string until the non-closed string)
+                data[0] = getLeastFret()
+                data[1] = getMaxUnClosedString()
+            } else {
+                //Horizontal press: 1 string -> the highest string of the guitar
+                data[0] = getLeastFret()
+                data[1] = STRING
+            }
+        }
+
+        return data
+    }
+
+    /**
+     * Get the item at the 1 string is the smallest item in the entire chord.
+     *
+     * @param chord Chord object
+     * @return Returns true if the 1st string is the smallest item,
+     * otherwise returns false.
+     */
+    fun firstStringLeast():Boolean {
+        return frets[frets.size - 1] == getLeastFret()
+    }
+
+    /**
+     * Get the largest chord of the same item at the same 1 chord.
+     *
+     * For example, if the chord is: 3, 3, 2, 1, 1, 1 then the 1st string is 1,
+     * and the 2, 3 strings are the same as the 1 string,
+     * so the largest string is returned: 3 (string).
+     *
+     * @param chord Chord object
+     * @return Maximum string.
+     */
+    fun getWithFirstString():Int {
+        var string = 1
+        while (frets[frets.size - 1] == frets[frets.size - 1 - string]) {
+            if(fingers!=null){
+                if(fingers[fingers.size-1]== fingers[fingers.size-1-string]){
+                    string+=1
+                }
+                return string
+            }else{
+                string += 1
+            }
+
+        }
+        return string
+    }
+
+    /**
+     * Get the largest non-closed string.
+     *
+     * Suppose the chord is: -1,3,2,1,1,1.
+     * The largest string is the sixth string,
+     * but the sixth string is an empty string. Then look at the 5th string.
+     * Since it is not a closed string, it returns 5 .
+     *
+     * @param chord Chord object
+     * @return string.
+     */
+    fun getMaxUnClosedString():Int {
+        var string = frets.size
+        while (frets[frets.size - string] == -1) {
+            string -= 1
+        }
+        return string
+    }
+
 
     override fun toString():String {
         return "Chord{" +

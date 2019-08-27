@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 Airsaid. https://github.com/airsaid
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,7 +29,7 @@ import com.github.airsaid.library.widget.ChordView.ShowMode.SIMPLE_SHOW_MODE
  *
  * @author airsaid
  */
-class ChordView(context:Context,
+class ChordView @JvmOverloads constructor(context:Context,
                 attrs:AttributeSet?=null,
                 private var mChord:Chord=Chord.defaultC,
                 defStyleAttr:Int=0)
@@ -107,7 +107,6 @@ class ChordView(context:Context,
     private var mBarreStrokeColor :Int
 
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mChordHelper = ChordHelper()
     private var mHeadPath = Path()
 
     init {
@@ -309,11 +308,8 @@ class ChordView(context:Context,
     private fun drawNotes(canvas:Canvas) {
         if (mChord == null) return
 
-        val frets:IntArray = mChord.getFrets()
-        val fingers:IntArray = mChord.getFingers()
-
         // Draw a barre
-        val barreChord:IntArray = mChordHelper.getBarreChordData(mChord)
+        val barreChord:IntArray? = mChord.getBarreChordData()
         var barreFret = 0
         var barreString = 0
         // Determine if there is a horizontal situation
@@ -350,21 +346,21 @@ class ChordView(context:Context,
             }
 
             // Draw horizontally on both ends of the node
-            drawNote(canvas, barreFret, NUM_STRINGS, if(fingers != null)  1 else 0, 255, 0F, 0)
-            drawNote(canvas, barreFret, NUM_STRINGS - (barreString - 1), if(fingers != null)  1 else 0, 255, 0F, 0)
+            drawNote(canvas, barreFret, NUM_STRINGS, if(mChord.fingers != null)  1 else 0, 255, 0F, 0)
+            drawNote(canvas, barreFret, NUM_STRINGS - (barreString - 1), if(mChord.fingers != null)  1 else 0, 255, 0F, 0)
         }
         // Draw other nodes
-        for (index in frets.indices) {
-            val fret = frets[index]
+        for (index in mChord.frets.indices) {
+            val fret = mChord.frets[index]
             // Do not draw closed and empty strings
             if (fret < 1) {
                 continue
             }
             // Do not draw nodes that are barred
-            if (barreChord != null && barreFret == fret && frets.size - index <= barreString) {
+            if (barreChord != null && barreFret == fret && mChord.frets.size - index <= barreString) {
                 continue
             }
-            drawNote(canvas, frets[index], index + 1, if(fingers != null) fingers[index] else 0, mNoteAlpha, mNoteStrokeWidth, mNoteStrokeColor)
+            drawNote(canvas, mChord.frets[index], index + 1, if(mChord.fingers != null) mChord.fingers[index] else 0, mNoteAlpha, mNoteStrokeWidth, mNoteStrokeColor)
         }
     }
 
@@ -449,8 +445,7 @@ class ChordView(context:Context,
      * @return Empty or closed strings represent pictures.
      */
     private fun getStringBitmap(string:Int):Bitmap? {
-        val frets:IntArray = mChord.getFrets()
-        val fret:Int = frets[string]
+        val fret:Int = mChord.frets[string]
         if (fret == -1) { // Closed string
             return mClosedStringBitmap
         } else if (fret == 0) { // Empty string
