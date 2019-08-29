@@ -1,6 +1,6 @@
 # PROJECT ARCHIVED 
 
-my fork has now been folded into [another project](github.com/medavox/calph).
+my fork has now been folded into [another project](https://github.com/medavox/calph).
 
 <p align="center"><img src="app/src/main/res/drawable/logotype.png" alt="Proje ismi" height="50px"></p>
 
